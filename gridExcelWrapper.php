@@ -60,7 +60,7 @@ class gridExcelWrapper {
 						$this->excel->getActiveSheet()->mergeCells($this->getColName($j).($this->headerLinesNum + $i + 1).':'.$this->getColName($j + $this->columns[$i][$j]['colspan'] - 1).($this->headerLinesNum + $i + 1));
 					}
 					if (isset($columns[$i][$j]['rowspan'])) {
-						$this->excel->getActiveSheet()->mergeCells($this->getColName($j).($this->headerLinesNum + $i + 1).':'.$this->getColName($j).($this->headerLinesNum + $i + $this->columns[$i][$j]['rowspan']));
+						$this->excel->getActiveSheet()->mergeCells($this->getColName($j).($this->headerLinesNum + $i + 1).':'.$this->getColName($j).($this->headerLinesNum + $i + min($this->columns[$i][$j]['rowspan'], count($this->columns))));
 					}
 				}
 			}
