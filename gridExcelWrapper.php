@@ -42,6 +42,7 @@ class gridExcelWrapper {
 					$this->excel->getActiveSheet()->getStyle($this->getColName($j).$this->currentRow)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 					$this->excel->getActiveSheet()->getStyle($this->getColName($j).$this->currentRow)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 					$this->excel->getActiveSheet()->getStyle($this->getColName($j).$this->currentRow)->getFont()->getColor()->setRGB($textColor);
+					$this->excel->getActiveSheet()->getStyle($this->getColName($j).$this->currentRow)->getAlignment()->setWrapText(true);
 				}
 				if (($i == 0)&&(isset($columns[0][$j]))) {
 					if ($columns[0][$j]['excel_type'] != "")
@@ -167,6 +168,7 @@ class gridExcelWrapper {
 			$align = $row[$i]['align'];
 			if ($align == false) $align = $this->columns[0][$i]['align'];
 			$this->excel->getActiveSheet()->getStyle($this->getColName($i).$this->currentRow)->getAlignment()->setHorizontal($align);
+			$this->excel->getActiveSheet()->getStyle($this->getColName($i).$this->currentRow)->getAlignment()->setWrapText(true);
         }
 
 		$this->currentRow++;
@@ -227,16 +229,28 @@ class gridExcelWrapper {
 		$this->excel->getActiveSheet()->setTitle($title);
 		$this->excel->setActiveSheetIndex(0);
 
-		if (strtolower($type) == 'excel2003') {
-			$objWriter = PHPExcel_IOFactory::createWriter($this->excel, 'Excel5');
-			header('Content-Type: application/vnd.ms-excel');
-			header('Content-Disposition: attachment;filename="grid.xls"');
-			header('Cache-Control: max-age=0');
-		} else {
-			$objWriter = PHPExcel_IOFactory::createWriter($this->excel, 'Excel2007');
-			header('Content-Type: application/xlsx');
-			header('Content-Disposition: attachment;filename="grid.xlsx"');
-			header('Cache-Control: max-age=0');
+		switch (strtolower($type)) {
+			case 'excel2003':
+				$objWriter = PHPExcel_IOFactory::createWriter($this->excel, 'Excel5');
+				header('Content-Type: application/vnd.ms-excel');
+				header('Content-Disposition: attachment;filename="grid.xls"');
+				header('Cache-Control: max-age=0');
+				break;
+			case 'csv':
+				$objWriter = PHPExcel_IOFactory::createWriter($this->excel, 'CSV');
+				$objWriter->setDelimiter(';');
+				header("Content-type: application/csv");
+				header("Content-Disposition: attachment; filename=grid.csv");
+				header("Pragma: no-cache");
+				header("Expires: 0");
+				break;
+			case 'excel2007':
+			default:
+				$objWriter = PHPExcel_IOFactory::createWriter($this->excel, 'Excel2007');
+				header('Content-Type: application/xlsx');
+				header('Content-Disposition: attachment;filename="grid.xlsx"');
+				header('Cache-Control: max-age=0');
+				break;
 		}
 		$objWriter->save('php://output'); 
 	}
