@@ -114,6 +114,7 @@ class gridExcelWrapper {
 		$this->excel->getActiveSheet()->getStyle(($this->getColName(0).$this->currentRow.':'.$this->getColName(count($row) - 1).$this->currentRow))->applyFromArray($styleArray);
 
         for ($i = 0; $i < count($row); $i++) {
+			if ($i >= count($this->types)) continue;
 
 			$this->excel->getActiveSheet()->getStyle(($this->getColName($i).$this->currentRow.':'.$this->getColName($i).$this->currentRow))->applyFromArray($styleArray);
 
@@ -145,6 +146,7 @@ class gridExcelWrapper {
 				case 'num':
 				case 'edn':
 				case 'ron':
+					$text = str_replace(",", ".", $text);
 					$this->excel->getActiveSheet()->getCell($this->getColName($i).$this->currentRow)->setValueExplicit($text, PHPExcel_Cell_DataType::TYPE_NUMERIC);
 					break;
 				case 'boolean':
