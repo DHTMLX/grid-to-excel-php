@@ -4,7 +4,7 @@ require_once 'gridExcelGenerator.php';
 require_once 'gridExcelWrapper.php';
 
 
-$debug = true;
+$debug = false;
 $error_handler = set_error_handler("PDFErrorHandler");
 
 if (get_magic_quotes_gpc()) {
