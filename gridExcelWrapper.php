@@ -140,12 +140,12 @@ class gridExcelWrapper {
 				case 'ro':
 				case 'co':
 				case 'coro':
+				case 'edn':
+				case 'ron':
 					$this->excel->getActiveSheet()->getCell($this->getColName($i).$this->currentRow)->setValueExplicit($text, PHPExcel_Cell_DataType::TYPE_STRING);
 					break;
 				case 'number':
 				case 'num':
-				case 'edn':
-				case 'ron':
 					$text = str_replace(",", ".", $text);
 					$this->excel->getActiveSheet()->getCell($this->getColName($i).$this->currentRow)->setValueExplicit($text, PHPExcel_Cell_DataType::TYPE_NUMERIC);
 					break;
